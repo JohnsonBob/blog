@@ -7,6 +7,7 @@ categories:
 tags:
 - Webpack
 - Vue
+- Stylus
 ---
 
 
@@ -14,7 +15,7 @@ tags:
 
 ```
 npm inti
-npm i webpack vue vue-loader css-loader vue-template-compiler
+npm i webpack vue vue-loader css-loader vue-template-compiler style-loader
 ```
 
 ##### 2、创建src目录并在src目录下创建app.vue文件，在app.vue文件中写入：
@@ -76,7 +77,7 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /.vue$/,
+                test: /\.vue$/,
                 loader: "vue-loader"
             },
             {
@@ -103,5 +104,56 @@ module.exports = {
 npm run build
 ```
 
+##### 7、图片处理 url-loader
 
+###### 7.1、安装环境 url-loader file-loader
+```
+npm i url-loader file-loader
+```
 
+###### 7.2、webpack.config.js配置如下
+```
+module.exports = {
+	module: {
+		rules: [
+			{
+                test: /\.(gif|jpg|jpeg|png|svg)$/,
+                use: [
+                    {
+                        loader: "url-loader",
+                        options: {
+                            limit: 1024,  //小于1024转换为base64直接放在js内容内
+                            name:'[name].[ext]',  //名字使用原来的文件名 ext为扩展名
+                        }
+                    }
+                ]
+            }
+		]
+	}
+}
+```
+
+##### 8、使用CSS预处理框架Stylus
+
+###### 8.1、安装环境 stylus-loader stylus
+```
+npm i stylus-loader stylus
+```
+
+###### 8.2、webpack.config.js配置如下
+```
+module.exports = {
+	module: {
+		rules: [
+			{
+                test: /\.styl$/,
+                use: [
+                    'style-loader',
+                    'css-loader',
+                    'stylus-loader'  //处理.styl文件为css文件后返回给上级处理
+                ]
+            }
+		]
+	}
+}
+```
