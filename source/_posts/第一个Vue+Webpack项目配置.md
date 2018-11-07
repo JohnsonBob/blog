@@ -8,6 +8,8 @@ tags:
 - Webpack
 - Vue
 - Stylus
+- postcss
+- babel
 ---
 
 
@@ -155,5 +157,66 @@ module.exports = {
             }
 		]
 	}
+}
+```
+
+##### 9、使用postcss和babel
+
+###### 9.1、安装依赖
+```
+npm i postcss-loader autoprefixer babel-loader babel-core
+npm install babel-preset-env babel-plugin-transform-vue-jsx
+```
+
+###### 9.2、根目录创建babel配置文件.babelrc
+```
+//babel配置文件
+{
+  "presets": [
+    "env"
+  ],
+  "plugins": [
+    "transform-vue-jsx"
+  ]
+}
+```
+
+###### 9.3、根目录创建postcss配置文件postcss.config.js
+```
+//postcss配置文件  后处理css
+const autoprefixer = require('autoprefixer');
+
+module.exports= {
+    plugins:[
+        autoprefixer(),
+    ]
+};
+```
+
+###### 9.4、webpack.config.js文件修改
+```
+const config = {
+    module: {
+        rules: [
+            {
+            	test: /\.jsx$/,
+            	loader: "babel-loader"
+            },
+            {
+            	test: /\.styl$/,
+            	use: [
+            		'style-loader',
+            		'css-loader',
+            		{
+            			loader: "postcss-loader",
+            			options: {
+            				sourceMap:true,     //使用stylus-loader生成sourceMap
+            			}
+            		},
+            		'stylus-loader'   //处理.styl文件为css文件后返回给上级处理
+            	]
+            },
+        ]
+    }
 }
 ```

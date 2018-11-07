@@ -106,10 +106,20 @@ const config = {
                 use: ['style-loader','css-loader']
             },
             {
+                test: /\.jsx$/,
+                loader: "babel-loader"
+            },
+            {
                 test: /\.styl$/,
                 use: [
                     'style-loader',
                     'css-loader',
+                    {
+                        loader: "postcss-loader",
+                        options: {
+                            sourceMap:true,     //使用stylus-loader生成sourceMap
+                        }
+                    },
                     'stylus-loader'   //处理.styl文件为css文件后返回给上级处理
                 ]
             },
@@ -165,6 +175,8 @@ if(isDev){
 }
 
 module.exports = config;
+
+
 ```
 
 ##### 5、启动调试项目
